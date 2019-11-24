@@ -12,6 +12,7 @@ public class matchEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
+    private String fixture_id;
     private String equipe_A ;
     private String equipe_B ;
     private boolean live;
@@ -20,6 +21,24 @@ public class matchEntity {
     private String winner;
     private int equipe_A_score ;
     private int equipe_B_score ;
+    private String time;
+    private String last_update;
+
+    public String getLast_update() {
+        return last_update;
+    }
+
+    public void setLast_update(String last_update) {
+        this.last_update = last_update;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public Long getId() {
         return id;
@@ -84,4 +103,11 @@ public class matchEntity {
     public void setFinished(boolean finished) {
         this.finished = finished;
     }
+    public String getFixture_id() {
+        return fixture_id;
+    }
+    public void setFixture_id(String fixture_id) {
+        this.fixture_id = fixture_id;
+    }
+
 }
