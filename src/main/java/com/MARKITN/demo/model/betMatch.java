@@ -15,8 +15,10 @@ public class betMatch {
     private matchEntity match;
     private int equipe_A_score;
     private int equipe_B_score;
+    private boolean finished;
     // it can be A or B
     private String winner;
+
     public Long getId() {
         return id;
     }
@@ -57,4 +59,11 @@ public class betMatch {
         this.winner = winner;
     }
 
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
 }
