@@ -12,11 +12,22 @@ public class betSheet {
     private Long id;
 
     @OneToMany
-    @JoinColumn(name = "betMatch_id")
+    @JoinColumn(name = "betSheet_id")
     private List<betMatch> betMatches;
     private boolean validated = true;
     private boolean finished = false;
     private boolean wonSheet;
+    // state can be : eliminated ,won , in progress
+    // initialement : in progress
+    private String state = "in progress";
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 
     public Long getId() {
         return id;

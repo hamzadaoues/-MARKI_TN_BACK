@@ -1,5 +1,6 @@
 package com.MARKITN.demo.service;
 
+import com.MARKITN.demo.model.betMatch;
 import com.MARKITN.demo.model.matchEntity;
 import org.json.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,15 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class update_database {
 
     @Autowired(required = true)
     com.MARKITN.demo.service.matchEntityService matchEntityService;
+    @Autowired
+    com.MARKITN.demo.service.BetMatchService betMatchService;
 
     private final RestTemplate restTemplate;
     private final String urlAPI = "https://livescore-api.com/api-client/scores/live.json?key=bdWSx0InpkiiTDK0&secret=8beDrImgcxkN3qJfEF7bGQz6aSo3w94E";
@@ -42,11 +46,11 @@ public class update_database {
                 int score_B = Integer.parseInt(scores[1]);
                 // find our matchEntity
                 matchEntity matchEntity = this.matchEntityService.findMatchByFixtureId(fixture_id);
-                 //  System.out.println(matchEntity.getEquipe_A());
+                //  System.out.println(matchEntity.getEquipe_A());
                 if (matchEntity != null) {
                     matchEntity.setEquipe_A_score(score_A);
                     matchEntity.setEquipe_B_score(score_B);
-                   if (score_A > score_B) matchEntity.setWinner("A");
+                    if (score_A > score_B) matchEntity.setWinner("A");
                     if (score_A < score_B) matchEntity.setWinner("B");
                     if (score_A == score_B) matchEntity.setWinner("draw");
                     matchEntity.setTime(match.getString("time"));
@@ -69,5 +73,15 @@ public class update_database {
             System.out.println(e);
         }
         System.out.println("Table match is up to date \n");
+    }
+
+    // update betMatch if the match is finished
+    public void update_betMatch() {
+        List<betMatch> betMatchs = this.betMatchService.getAllBetMatch();
+        for (int i = 0; i < betMatchs.size(); i++) {
+            betMatch betMatch = betMatchs.get(i);
+            betMatch.setFinished(betMatch.getMatch().isFinished());
+            this.betMatchService.updateBetMatch(betMatch);
+        }
     }
 }
