@@ -22,7 +22,7 @@ public class update_database {
     com.MARKITN.demo.service.BetMatchService betMatchService;
 
     private final RestTemplate restTemplate;
-    private final String urlAPI = "https://livescore-api.com/api-client/scores/live.json?key=bdWSx0InpkiiTDK0&secret=8beDrImgcxkN3qJfEF7bGQz6aSo3w94E";
+    private final String urlAPI = "https://livescore-api.com/api-client/scores/live.json?key=x4UzBMvqIjAh04MV&secret=sNNslkq3ZhsoeJCMNxmokRP2bpkbt76W";
 
     public update_database(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
@@ -41,15 +41,19 @@ public class update_database {
                 JSONObject match = (JSONObject) listMatch.get(i);
                 String fixture_id = match.getString("fixture_id");
                 String liveScore = match.getString("score");
+                String equipa_A = match.getString("home_name");
+                String equipa_B = match.getString("away_name");
                 String[] scores = liveScore.split(" - ");
                 int score_A = Integer.parseInt(scores[0]);
                 int score_B = Integer.parseInt(scores[1]);
                 // find our matchEntity
                 matchEntity matchEntity = this.matchEntityService.findMatchByFixtureId(fixture_id);
-                //  System.out.println(matchEntity.getEquipe_A());
+                //System.out.println(matchEntity.getEquipe_A());
                 if (matchEntity != null) {
                     matchEntity.setEquipe_A_score(score_A);
                     matchEntity.setEquipe_B_score(score_B);
+                    matchEntity.setEquipe_A(equipa_A);
+                    matchEntity.setEquipe_B(equipa_B);
                     if (score_A > score_B) matchEntity.setWinner("A");
                     if (score_A < score_B) matchEntity.setWinner("B");
                     if (score_A == score_B) matchEntity.setWinner("draw");
@@ -69,12 +73,13 @@ public class update_database {
                     this.matchEntityService.save(matchEntity);
                 }
             }
+            System.out.println("Table EntityMatch is up to date \n");
         } catch (Exception e) {
             System.out.println(e);
         }
-        System.out.println("Table match is up to date \n");
     }
 
+    @Scheduled(fixedRate = 9000)
     // update betMatch if the match is finished
     public void update_betMatch() {
         List<betMatch> betMatchs = this.betMatchService.getAllBetMatch();
@@ -83,5 +88,6 @@ public class update_database {
             betMatch.setFinished(betMatch.getMatch().isFinished());
             this.betMatchService.updateBetMatch(betMatch);
         }
+        System.out.println("Table BetMatch is up to date \n");
     }
 }

@@ -3,6 +3,7 @@ package com.MARKITN.demo.service.implementation;
 import com.MARKITN.demo.model.betMatch;
 import com.MARKITN.demo.service.updateSheet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.MARKITN.demo.model.betSheet;
 
@@ -16,6 +17,8 @@ public class updateSheetImpl implements updateSheet {
     @Autowired
     com.MARKITN.demo.service.BetMatchService betMatchService;
 
+
+    @Scheduled(fixedRate = 6000)
     @Override
     public void update() {
         List<betSheet> betSheets = this.betSheetService.getAllBetSheet();

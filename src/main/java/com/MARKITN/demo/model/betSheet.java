@@ -11,7 +11,7 @@ public class betSheet {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "betSheet_id")
     private List<betMatch> betMatches;
     private boolean validated = true;
